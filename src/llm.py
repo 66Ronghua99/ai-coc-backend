@@ -50,4 +50,4 @@ class LLMManager:
                 temperature=0.7,
                 tools=functions,
             )
-        return full_messages, response.choices[0].message.content 
+        return full_messages[1:], response.choices[0].message.content 
