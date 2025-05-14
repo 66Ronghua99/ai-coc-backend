@@ -3,7 +3,13 @@ import numpy as np
 from typing import List, Tuple
 
 class VectorStore:
-    def __init__(self, dimension: int = 1536):
+    def __init__(self, dimension: int = 384):
+        """Initialize a vector store with FAISS.
+        
+        Args:
+            dimension: Dimensionality of the embedding vectors
+                      Default is 384 for sentence-transformers, was 1536 for OpenAI
+        """
         self.dimension = dimension
         self.index = faiss.IndexFlatL2(dimension)
         self.texts = []
