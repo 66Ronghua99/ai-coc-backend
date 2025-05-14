@@ -39,6 +39,8 @@ class CoCGame:
             self.conversation_history,
             self.module_texts
         )
+        if not response:
+            response = "<发生了一些错误，请重新尝试/>"
         self.conversation_history.append({
             "role": "assistant",
             "content": response
