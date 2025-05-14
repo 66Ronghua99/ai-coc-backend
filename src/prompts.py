@@ -5,7 +5,7 @@ CoC跑团强调的不是打败强大的敌人，而是探索未知、揭示真�
 简而言之，CoC跑团就是在一个充满洛夫克拉夫特式恐怖的架空世界中，玩家扮演普通人去调查超自然事件，并在规则的引导下，与同伴一起体验充满未知和危险的故事
 在游戏的过程中，你需要尽可能绘声绘色地描述游戏场景，让玩家有身临其境的感觉。同时，请不要过多地提供信息让玩家做选择，而是尽可能地让玩家描述自己希望执行什么行为，赋予玩家足够的自由度与想象空间。
 
-<rule>
+<basic_rules>
 以下是关于COC跑团过程中的简单规则的介绍：
 # 创建调查员
 调查员有 8 项基础属性，通过3D65或2D6+65决定，年龄会影响属性。计算属性的半值和五分之一值用于困难和极难检定。
@@ -83,21 +83,22 @@ CoC跑团强调的不是打败强大的敌人，而是探索未知、揭示真�
 - 疯狂: 失去大量理智点可导致临时性、不定性或永久性疯狂。
 - 疯狂的影响: 疯狂经历包括疯狂发作（失去控制）和潜在疯狂（持续精神脆弱）。疯狂可带来恐惧症和狂躁症。
 - 疯狂的治疗与恢复: 临时性疯狂自动恢复或通过休息恢复；不定性疯狂需通过治疗（私人护理或收容所）恢复。
-</rule>
+</basic_rules>
+
+<retrieving_knowledge>
+在你并不明确自己的操作是否合理时，你应该使用外部工具来检索相关信息。
+同时，当对话当中出现错误的时候，请观察错误的原因，并根据错误的原因来调整你的行为。必要的时候，使用合适的工具来补充自己的信息以执行正确的操作。
+</retrieving_knowledge>
 
 <scenario>
-此次冒险将使用以下的模组(Scenario)。在冒险开始之后，根据用户的行为与选择做出反应，让冒险足够精彩: {scenario}
+此次冒险将使用以下的模组(Scenario)。在冒险开始之后，根据用户的行为与选择做出反应。同时，你需要明确何时冒险何时结束，包括调查员是否存活，目标是否达成，以及是否需要进行模组结算。 {scenario}
 </scenario>
-
-<functions>
-你会有一些额外的function可以使用，请根据具体情况选择使用。
-</functions>
 """
 
 USER_PROMPT = """
-相关规则参考: {rules_context}
 玩家行动: {player_input}
 """
+# 相关模组上下文：{module_context}
 
 functions = [
         {
@@ -483,4 +484,189 @@ functions = [
         "strict": True
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "retrieve_coc_rules_investigator_creation",
+            "description": "Provides comprehensive rules and steps for creating an investigator character in Call of Cthulhu 7th Edition. Covers determining eight core attributes (STR, CON, SIZ, DEX, APP, INT, POW, EDU) via dice rolls and age adjustments; calculating derived attributes (Damage Bonus, Build, Hit Points, Movement Rate); selecting a profession and allocating skill points (Occasional Skills and Interest Skills), including weapon/firearm skills and Credit Rating; developing a character background with personal details, beliefs, significant people, locations, and valuable items, including the concept of Key Background Connections; determining starting wealth, assets, and equipment based on Credit Rating and lifestyle; and provides optional character creation methods and a quick reference guide.",
+            "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "The query to retrieve the rules for investigator creation"
+                        }
+                    },
+                    "required": ["query"]
+                }
+            }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "retrieve_coc_rules_alien_technology",
+            "description": "Provides details on alien technologies and artifacts from various mythical races in Call of Cthulhu 7th Edition. Includes descriptions and functions of items created by Mi-Go (e.g., brain cylinders, electrical guns, mining machines, sprayers), Serpent People (e.g., Black Lotus, toxins, serums), Yithians (e.g., stasis boxes, memory machines, time communicators), Elder Things (e.g., crystal absorbers, space gates), and others (e.g., alien crystals, vision-granting items, protective artifacts, strange weapons). Explains their potential uses and effects on investigators, often blurring the lines between science and magic.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "The specific alien technology or concept the user is asking about."
+                }
+                },
+                "required": ["query"]
+            }
+        }
+    },
+    {
+  "type": "function",
+  "function": {
+    "name": "retrieve_coc_rules_combat",
+    "description": "Provides detailed rules for combat encounters in Call of Cthulhu 7th Edition. Covers combat rounds, turn order based on Dexterity, available actions (attack, maneuver, escape, cast spell), unarmed and armed close combat using Fighting skill vs Fighting/Dodge, maneuvers (disarm, trip, grapple, etc.) based on Build comparison and skill rolls, surprise attacks, being outnumbered, ranged attacks with Firearms skill vs Difficulty Levels based on range and modifiers (cover, movement, aiming, size), automatic fire (bursts, volleys), weapon malfunctions, damage and healing (Regular vs Major wounds, unconsciousness, dying, recovery using First Aid/Medicine), other damage types (falling, poison, etc.), and various optional combat rules (initiative rolls, knock-out blows, spending Luck, handling failed rolls, hidden damage, suppressing fire, armor/hit location rules, movement in combat, shooting through cover, poison details).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The specific combat rule, action, or concept the user is asking about (e.g., 'Fighting maneuvers', 'Automatic fire rules', 'Healing a major wound', 'Surprise attack')."
+        }
+      },
+      "required": ["query"]
+    }
+  }
+},
+    {
+  "type": "function",
+  "function": {
+    "name": "retrieve_coc_rules_chase",
+    "description": "Provides detailed rules for handling chase sequences (on foot, vehicle, etc.) in Call of Cthulhu 7th Edition. Covers establishing a chase by comparing speed (MOV) based on skill rolls, setting up the chase using 'locations' and action points, movement rules, handling hazards and barriers with skill checks (Climb, Dodge, Strength, etc.), conflict within a chase (attacks, maneuvers), vehicle rules (Build, damage, crashes), and various optional rules (random hazards, sudden hazards, speeding, hiding, ranged attacks during chase, driver damage, multi-character chases). Explains how to determine turn order, resolve actions, and manage the flow of the pursuit.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The specific chase rule, phase, or concept the user is asking about (e.g., 'Setting up a chase', 'Handling hazards', 'Vehicle rules in a chase', 'Action points')."
+        }
+      },
+      "required": ["query"]
+    }
+  }
+},
+    {
+  "type": "function",
+  "function": {
+    "name": "retrieve_coc_rules_game_system",
+    "description": "Provides comprehensive rules for the core game system of Call of Cthulhu 7th Edition. Covers when and how to roll dice, skill and attribute checks (including difficulty levels: Regular, Hard, Extreme), the concept of Pushing the Roll for a second attempt with increased consequences, resolving checks involving multiple players, rules for surpassing human limits with teamwork, interpreting Critical Success (01) and Failure (96-100), special checks (Luck, Idea/Intelligence, Know, Opposed), mechanics for Bonus and Penalty Dice, Combined Skill checks, setting difficulty for Social skills (Charm, Fast Talk, Intimidate, Persuade), gaining skill experience (skill improvement checks), managing Investigator finances (Credit Rating, lifestyle, expenses, income, debt), finding and training skills and making acquaintances, effects of aging, spending and recovering Luck points, and interacting with NPCs.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The specific game system rule, check type, or concept the user is asking about (e.g., 'Skill checks', 'Pushing the Roll', 'Opposed checks', 'Credit Rating rules', 'Aging effects')."
+        }
+      },
+      "required": ["query"]
+    }
+  }
+},
+    {
+  "type": "function",
+  "function": {
+    "name": "retrieve_coc_rules_keeper_guide",
+    "description": "Provides comprehensive guidance and rules for the Keeper (Game Master) in Call of Cthulhu 7th Edition. Covers setting up and preparing the game environment and atmosphere, guiding character creation and integrating backstories into the module, portraying Non-Player Characters (NPCs) and monsters, managing game flow and pacing, handling skill checks and dice rolls (including setting difficulty, pushing rolls, critical success/failure, bonus/penalty dice), resolving social interactions and insight checks (Spot Hidden, Listen, Psychology), managing investigator finances and downtime activities (skill improvement, wealth changes), presenting handouts and clues, showcasing the horror of the Mythos, creating and running scenarios and campaigns (linear, non-linear, themes), and handling character outcomes (death, madness). Explains the Keeper's role in interpreting rules and narrating events to create a compelling horror experience.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The specific Keeper task, rule interpretation, game management technique, or scenario design concept the user is asking about (e.g., 'Setting check difficulty', 'Handling NPC reactions', 'Designing non-linear scenarios', 'Using handouts')."
+        }
+      },
+      "required": ["query"]
+    }
+  }
+},
+    {
+  "type": "function",
+  "function": {
+    "name": "retrieve_coc_mythos_creatures_gods",
+    "description": "Provides information on various creatures, beasts, and alien gods from Call of Cthulhu 7th Edition's bestiary. Includes details on Mythos creatures (e.g., Deep Ones, Mi-Go, Shoggoths, Byakhee, Star-spawn), Outer Gods and Great Old Ones (e.g., Cthulhu, Hastur, Nyarlathotep, Shub-Niggurath, Azathoth), classic monsters (e.g., Ghouls), and beasts. Describes their attributes (STR, CON, SIZ, DEX, INT, POW, Build), combat abilities (fighting, maneuvers, special attacks), special powers (spells, mental abilities, unique traits), sanity loss for encountering them, background lore, and guidance for the Keeper on portraying them effectively, including their motivations, tactics, and resistance to physical harm or conventional understanding.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The name of the specific creature, god, or type of mythical being the user is asking about (e.g., 'Deep One stats', 'Cthulhu's powers', 'Ghoul combat', 'Mi-Go behavior', 'Nyarlathotep forms')."
+        }
+      },
+      "required": ["query"]
+    }
+  }
+},
+   {
+  "type": "function",
+  "function": {
+    "name": "retrieve_coc_rules_sanity",
+    "description": "Provides comprehensive rules for Sanity (理智) in Call of Cthulhu 7th Edition. Covers Sanity Points and Sanity Checks (when to roll, success/failure, SAN loss notation like SAN 1/1D4, involuntary actions, critical failures), calculation of Maximum Sanity (99 - Cthulhu Mythos skill), descriptions and effects of Temporary, Indefinite, and Permanent Madness, the three stages of madness (Bout of Madness, Underlying Insanity, Recovery), examples of SAN loss for various encounters, detailed lists of Phobia and Mania symptoms, madness side effects (phobias, manias, illusions), the Reality Check rule, and how mythos-related madness increases the Cthulhu Mythos skill.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The specific sanity rule, madness type, check, or effect the user is asking about (e.g., 'Sanity checks', 'Temporary madness duration', 'Reality check', 'Sanity loss from seeing a Ghoul', 'Phobia symptoms')."
+        }
+      },
+      "required": ["query"]
+    }
+  }
+},
+    {
+  "type": "function",
+  "function": {
+    "name": "retrieve_coc_rules_skills",
+    "description": "Provides comprehensive rules for Investigator Skills in Call of Cthulhu 7th Edition. Covers skill definitions, usage with Regular, Hard, and Extreme difficulty levels, interpreting skill percentages (Novice to Master), rules for Skill Specialization, handling Opposed Skill checks against NPCs or other Investigators based on their relevant skills/attributes, the mechanic of Pushing the Roll for a second attempt with increased failure consequences (including examples for various skills and during madness), performing Combined Skill checks for tasks requiring multiple skills, includes a detailed list of skills with base percentages and icons, and provides in-depth descriptions for individual skills covering their definition, applicable difficulty levels, examples for pushing the roll and its failure consequences, and potential side effects when pushing while insane.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The specific skill rule, check type, individual skill description, or concept the user is asking about (e.g., 'Psychology skill', 'Pushing a Locksmith roll', 'Extreme difficulty examples', 'Combined skill checks', 'Skill specialization rules')."
+        }
+      },
+      "required": ["query"]
+    }
+  }
+},
+    {
+  "type": "function",
+  "function": {
+    "name": "search_all_rules",
+    "description": "Search across all Call of Cthulhu rule documents in the vector database to find relevant information. This function uses semantic search to find the most relevant content across all stored documents.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The question or search query about CoC rules, mechanics, monsters, or lore."
+        },
+        "limit": {
+          "type": "integer",
+          "description": "Maximum number of results to return (default: 5)."
+        }
+      },
+      "required": ["query"]
+    }
+  }
+},
+    {
+  "type": "function",
+  "function": {
+    "name": "get_available_rule_documents",
+    "description": "List all available Call of Cthulhu rule documents stored in the vector database that can be searched.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+}
 ]

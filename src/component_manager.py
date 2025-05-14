@@ -1,17 +1,26 @@
-
 from .roles import Role, PlayerManager, NPCManager, roll_dice
 from typing import Dict, Any, List, Optional, Tuple
 import random
+
+# Import VectorManager for vector search operations
+from .vector_manager import VectorManager
 
 # Initialize global player manager
 player_manager = PlayerManager()
 npc_manager = NPCManager()
 
+# Initialize vector manager for rule lookups
+vector_manager = VectorManager()
+
 def function_calling(function_name: str, parameters: Dict[str, Any]) -> Any:
     """
     Call a function with the given name and parameters.
     """
-    if function_name == "roll_dice":
+    # Vector search functions
+    if function_name in ["search_all_rules", "get_available_rule_documents",  "retrieve_coc_rules_skills", "retrieve_coc_rules_sanity", "retrieve_coc_mythos_creatures_gods", "retrieve_coc_rules_keeper_guide", "retrieve_coc_rules_game_system", "retrieve_coc_rules_chase", "retrieve_coc_rules_combat", "retrieve_coc_rules_alien_technology", "retrieve_coc_rules_investigator_creation" ]:
+        return vector_manager.function_calling(function_name, parameters)
+        
+    elif function_name == "roll_dice":
         return roll_dice(parameters["dice_num"], parameters["faces"])
         
     elif function_name == "create_role":
