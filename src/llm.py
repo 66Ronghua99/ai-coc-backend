@@ -16,7 +16,7 @@ class LLMManager:
     
     def load_scenario(self, scenario: str):
         self.sys_prompt = SYSTEM_PROMPT.format(scenario=scenario)
-        print(f"System prompt: {self.sys_prompt}")
+        # print(f"System prompt: {self.sys_prompt}")
         
     def get_response(self, messages: List[Dict[str, str]], player_input: str, module_context: str = "") -> str:
         """Get response from LLM with context."""

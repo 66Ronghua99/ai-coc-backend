@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from src.game import CoCGame
 from docx import Document
+from argparse import ArgumentParser
 import PyPDF2  # Added import for PDF handling
 
 def load_module_from_doc(doc_path: str) -> list:
@@ -13,14 +14,14 @@ def load_module_from_doc(doc_path: str) -> list:
             texts.append(paragraph.text)
     return texts
 
-def main():
+def main(module_name: str):
     load_dotenv()
     
     # Initialize game
     game = CoCGame()
     
     # Load module
-    module_path = os.path.join("docs", "scary_fall.docx")
+    module_path = os.path.join("docs", module_name)
     module_texts = load_module_from_doc(module_path)
     game.load_module(module_texts)
     
@@ -36,4 +37,7 @@ def main():
         print(f"\nGame Master: {response}")
 
 if __name__ == "__main__":
-    main()
+    parser = ArgumentParser()
+    parser.add_argument("-m", "--module", type=str, default="scary_fall.docx", help="Module name")
+    args = parser.parse_args()
+    main(args.module)
