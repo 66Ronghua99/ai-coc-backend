@@ -39,7 +39,7 @@ OPENAI_API_KEY="sk-xxxxxxxxx"
 
 ## Start game
 ```python
-python main.py -m module_name
+python main.py -m scary_fall.docx
 ```
 
 By default, `main.py` load `docx` modules from `/docs` folder. If you prefer to switch the module, download one and put it inside the module folder. Currently, we only supports `docx` files.
