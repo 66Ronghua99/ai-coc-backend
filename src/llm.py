@@ -7,11 +7,11 @@ from .prompts import SYSTEM_PROMPT, USER_PROMPT, functions
 from .component_manager import function_calling, player_manager, npc_manager
 
 load_dotenv()
-model_name = "gpt-4o-mini"
+model_name = "deepseek/deepseek-chat-v3-0324:free"
 
 class LLMManager:
     def __init__(self):
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.client = OpenAI(api_key=os.getenv("OPENROUTER_API_KEY"), base_url=os.getenv("OPENROUTER_URL"))
         self.sys_prompt = SYSTEM_PROMPT
     
     def load_scenario(self, scenario: str):
